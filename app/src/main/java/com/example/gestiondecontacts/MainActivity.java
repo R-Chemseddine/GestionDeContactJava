@@ -48,6 +48,27 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
         contactViewModel.getAllContacts().observe(this, contacts -> {
             contactAdapter.submitList(contacts);
         });
+
+        androidx.appcompat.widget.SearchView searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                performSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                performSearch(newText);
+                return false;
+            }
+
+            private void performSearch(String query) {
+                contactViewModel.searchContacts(query).observe(MainActivity.this, contacts -> {
+                    contactAdapter.submitList(contacts); // Assurez-vous d'avoir une méthode pour filtrer vos données
+                });
+            }
+        });
     }
 
     @Override

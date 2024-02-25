@@ -38,4 +38,9 @@ public class ContactViewModel extends ViewModel {
     public void update(Contact contact) {
         executorService.execute(() -> contactDao.update(contact));
     }
+
+    public LiveData<List<Contact>> searchContacts(String query) {
+        return contactDao.searchContacts(query);
+    }
+
 }
