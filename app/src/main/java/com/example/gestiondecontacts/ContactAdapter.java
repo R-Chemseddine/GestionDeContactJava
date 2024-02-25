@@ -78,7 +78,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             contactName.setText(contact.getName());
             contactPhone.setText(contact.getPhone());
 
-            // Utilisez Glide pour charger l'image. Assurez-vous d'ajouter la dépendance Glide à votre build.gradle
             Glide.with(itemView.getContext()).load(contact.getPhoto()).into(contactImage);
         }
     }

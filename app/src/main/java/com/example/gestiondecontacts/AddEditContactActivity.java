@@ -24,18 +24,15 @@ public class AddEditContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_contact_activity);
 
-        // Initialisation des composants UI
         EditText nameEditText = findViewById(R.id.editTextContactName);
         EditText phoneEditText = findViewById(R.id.editTextContactPhone);
         EditText addressEditText = findViewById(R.id.editTextContactAddress);
         EditText photoEditText = findViewById(R.id.editTextContactPhoto);
         Button saveButton = findViewById(R.id.buttonSaveContact);
 
-        // Obtenez une instance de la base de données et du DAO
         AppDatabase appDatabase = AppDatabase.getDatabase(getApplication());
         ContactDao contactDao = appDatabase.contactDao();
 
-        // Initialisez le ViewModel avec le ViewModelFactory
         ContactViewModelFactory factory = new ContactViewModelFactory(contactDao);
         contactViewModel = new ViewModelProvider(this, factory).get(ContactViewModel.class);
 
@@ -50,13 +47,11 @@ public class AddEditContactActivity extends AppCompatActivity {
                 if (!name.isEmpty() && !phone.isEmpty() && !address.isEmpty()) {
                     Contact newContact = new Contact(name, phone, address, photo);
 
-                    // Utilisation d'Executors pour exécuter de manière asynchrone
                     ExecutorService executorService = Executors.newSingleThreadExecutor();
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
                             contactViewModel.insert(newContact);
-                            // Retour au thread UI pour afficher le Toast
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

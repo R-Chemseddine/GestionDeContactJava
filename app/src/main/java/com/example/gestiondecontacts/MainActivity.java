@@ -26,45 +26,25 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialisation de RecyclerView
         contactsRecyclerView = findViewById(R.id.contactsRecyclerView);
         contactsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialisation de l'adaptateur avec une liste vide et 'this' comme listener
         contactAdapter = new ContactAdapter(emptyList(), this);
         contactsRecyclerView.setAdapter(contactAdapter);
 
-        // Initialisation du ViewModel
         contactViewModel = new ViewModelProvider(this, new ContactViewModelFactory(
                 ((ContactsApplication) getApplication()).getContactDao()
         )).get(ContactViewModel.class);
 
-        // Observation des contacts pour mise à jour de l'UI
         contactViewModel.getAllContacts().observe(this, newContacts -> {
             contactAdapter.updateContacts(newContacts);
         });
 
-        // Gestion du FloatingActionButton pour ajouter un contact
         FloatingActionButton fab = findViewById(R.id.fab_add_contact);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddEditContactActivity.class);
             startActivity(intent);
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         contactViewModel.getAllContacts().observe(this, contacts -> {
             contactAdapter.submitList(contacts);
         });
@@ -73,14 +53,12 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
     @Override
     public void onContactClicked(Contact contact) {
         Intent intent = new Intent(MainActivity.this, ContactDetailActivity.class);
-        intent.putExtra("CONTACT_ID", contact.getId()); // Assurez-vous que `id` est correctement défini et récupéré
-        // Passez les détails du contact en tant qu'extra
+        intent.putExtra("CONTACT_ID", contact.getId());
         intent.putExtra("CONTACT_NAME", contact.getName());
         intent.putExtra("CONTACT_PHONE", contact.getPhone());
         startActivity(intent);
     }
 
-    // Méthode helper pour créer une liste vide (puisque Java n'a pas de fonction `emptyList` directe comme Kotlin)
     private <T> List<T> emptyList() {
         return new ArrayList<>();
     }
