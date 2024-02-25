@@ -9,6 +9,8 @@
     <color name="secondaryColor">#FF03DAC5</color> <!-- Anciennement teal_200 -->
     <color name="secondaryDarkColor">#FF018786</color> <!-- Anciennement teal_700 -->
     <color name="colorOnSecondary">#FF000000</color> <!-- Utilisez black pour le texte/icones sur le secondary color -->
+    <color name="couleur_appel">#44AD44</color>
+    <color name="couleur_suppression">#910D0D</color>
 
     <!-- Couleurs de Support -->
     <color name="black">#FF000000</color>
