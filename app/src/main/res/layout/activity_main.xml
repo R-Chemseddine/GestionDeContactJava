@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gestion Des Contacts"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/primaryDarkColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
