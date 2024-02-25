@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -43,25 +44,36 @@ public class AddEditContactActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Récupérez les valeurs des champs de texte
-                String name = nameEditText.getText().toString();
-                String phone = phoneEditText.getText().toString();
-                String address = addressEditText.getText().toString();
-                String photo = photoEditText.getText().toString();
+                // Construire l'AlertDialog pour demander confirmation
+                new AlertDialog.Builder(AddEditContactActivity.this)
+                        .setTitle("Confirmer l'action")
+                        .setMessage("Êtes-vous sûr de vouloir sauvegarder ces modifications ?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // Récupérez les valeurs des champs de texte
+                            String name = nameEditText.getText().toString();
+                            String phone = phoneEditText.getText().toString();
+                            String address = addressEditText.getText().toString();
+                            String photo = photoEditText.getText().toString();
 
-                // Créez un objet Contact avec ces valeurs
-                Contact contact = new Contact(name, phone, address, photo);
+                            // Créez un objet Contact avec ces valeurs
+                            Contact contact = new Contact(name, phone, address, photo);
 
-                if (contactId == -1) {
-                    // Si contactId est -1, c'est un nouveau contact, donc insérez-le
-                    contactViewModel.insert(contact);
-                } else {
-                    // Sinon, c'est une mise à jour, donc définissez l'ID et mettez à jour le contact
-                    contact.setId(contactId);
-                    contactViewModel.update(contact);
-                }
+                            if (contactId == -1) {
+                                // Si contactId est -1, c'est un nouveau contact, donc insérez-le
+                                contactViewModel.insert(contact);
+                                Toast.makeText(AddEditContactActivity.this, "Contact ajouté", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Si contactId n'est pas -1, c'est une mise à jour
+                                contact.setId(contactId);
+                                contactViewModel.update(contact);
+                                Toast.makeText(AddEditContactActivity.this, "Contact mis à jour", Toast.LENGTH_SHORT).show();
+                            }
 
-                finish(); // Fermez l'activité après l'opération
+                            // Fermez l'activité après l'opération
+                            finish();
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
             }
         });
 
