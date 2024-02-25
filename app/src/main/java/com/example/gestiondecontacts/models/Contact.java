@@ -25,7 +25,7 @@ public class Contact {
     private final String photo;
 
     // Constructeur avec tous les champs
-    public Contact(String name, String address, String phone, String photo) {
+    public Contact(String name, String phone, String address, String photo) {
         this.id = new Random().nextLong();
         this.name = name;
         this.address = address;
@@ -52,5 +52,9 @@ public class Contact {
 
     public String getPhoto() {
         return photo;
+    }
+
+    public void setId(long contactId) {
+        this.id = contactId;
     }
 }

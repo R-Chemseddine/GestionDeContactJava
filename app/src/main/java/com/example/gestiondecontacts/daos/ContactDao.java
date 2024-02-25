@@ -33,4 +33,7 @@ public interface ContactDao {
     // La suppression par ID doit être gérée différemment en Java, car il n'y a pas de support direct pour suspend. Vous pouvez utiliser un ExecutorService pour exécuter cette opération de manière asynchrone.
     @Query("DELETE FROM contacts WHERE id = :contactId")
     void deleteContactById(long contactId);
+
+    @Query("SELECT * FROM contacts WHERE id = :contactId LIMIT 1")
+    LiveData<Contact> getContactById(long contactId);
 }

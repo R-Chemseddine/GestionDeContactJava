@@ -18,11 +18,14 @@ import java.util.concurrent.Executors;
 
 public class AddEditContactActivity extends AppCompatActivity {
     private ContactViewModel contactViewModel;
+    private long contactId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_contact_activity);
+
+        contactId = getIntent().getLongExtra("CONTACT_ID", -1);
 
         // Initialisation des composants UI
         EditText nameEditText = findViewById(R.id.editTextContactName);
@@ -42,35 +45,39 @@ public class AddEditContactActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = nameEditText.getText().toString().trim();
-                String phone = phoneEditText.getText().toString().trim();
-                String address = addressEditText.getText().toString().trim();
-                String photo = photoEditText.getText().toString().trim();
+                // Récupérez les valeurs des champs de texte
+                String name = nameEditText.getText().toString();
+                String phone = phoneEditText.getText().toString();
+                String address = addressEditText.getText().toString();
+                String photo = photoEditText.getText().toString();
 
-                if (!name.isEmpty() && !phone.isEmpty() && !address.isEmpty()) {
-                    Contact newContact = new Contact(name, phone, address, photo);
+                // Créez un objet Contact avec ces valeurs
+                Contact contact = new Contact(name, phone, address, photo);
 
-                    // Utilisation d'Executors pour exécuter de manière asynchrone
-                    ExecutorService executorService = Executors.newSingleThreadExecutor();
-                    executorService.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            contactViewModel.insert(newContact);
-                            // Retour au thread UI pour afficher le Toast
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(AddEditContactActivity.this, "Contact ajouté avec succès", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                    executorService.shutdown();
-                    finish();
+                if (contactId == -1) {
+                    // Si contactId est -1, c'est un nouveau contact, donc insérez-le
+                    contactViewModel.insert(contact);
                 } else {
-                    Toast.makeText(AddEditContactActivity.this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
+                    // Sinon, c'est une mise à jour, donc définissez l'ID et mettez à jour le contact
+                    contact.setId(contactId);
+                    contactViewModel.update(contact);
                 }
+
+                finish(); // Fermez l'activité après l'opération
             }
         });
+
+        long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
+        if (contactId != -1) {
+            contactViewModel.getContactById(contactId).observe(this, contact -> {
+                if (contact != null) {
+                    nameEditText.setText(contact.getName());
+                    phoneEditText.setText(contact.getPhone());
+                    addressEditText.setText(contact.getAddress());
+                    photoEditText.setText(contact.getPhoto());
+                }
+            });
+        }
+
     }
 }

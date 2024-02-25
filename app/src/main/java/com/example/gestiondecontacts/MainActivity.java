@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
     @Override
     public void onContactClicked(Contact contact) {
         Intent intent = new Intent(MainActivity.this, ContactDetailActivity.class);
-        intent.putExtra("CONTACT_ID", contact.getId()); // Assurez-vous que `id` est correctement défini et récupéré
+        intent.putExtra("CONTACT_ID", contact.getId());
         // Passez les détails du contact en tant qu'extra
         intent.putExtra("CONTACT_NAME", contact.getName());
         intent.putExtra("CONTACT_PHONE", contact.getPhone());

@@ -8,5 +8,6 @@
     <string name="save">Sauvegarder</string>
     <string name="hint_contact_photo">Lien photo</string>
     <string name="contact_photo">Photo du contact</string>
-    <string name="delete_contact">Supprimer le contact</string>
+    <string name="delete_contact">Supprimer</string>
+    <string name="edit_contact">Modifier</string>
 </resources>

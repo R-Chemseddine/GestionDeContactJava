@@ -31,4 +31,12 @@ public class ContactViewModel extends ViewModel {
     public void deleteContactById(long contactId) {
         executorService.execute(() -> contactDao.deleteContactById(contactId));
     }
+
+    public LiveData<Contact> getContactById(long contactId) {
+        return contactDao.getContactById(contactId);
+    }
+
+    public void update(Contact contact) {
+        executorService.execute(() -> contactDao.update(contact));
+    }
 }
