@@ -8,8 +8,9 @@
     <color name="secondaryDarkColor">#FF018786</color>
     <color name="colorOnSecondary">#FF000000</color>
     <color name="couleur_appel">#44AD44</color>
-    <color name="couleur_suppression">#910D0D</color>
+    <color name="couleur_suppression">#8F1414</color>
 
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#2CFFFFFF</color>
+    <color name="grey">#606060 </color>
 </resources>
