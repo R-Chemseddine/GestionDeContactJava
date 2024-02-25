@@ -34,11 +34,9 @@ public class AddEditContactActivity extends AppCompatActivity {
         EditText photoEditText = findViewById(R.id.editTextContactPhoto);
         Button saveButton = findViewById(R.id.buttonSaveContact);
 
-        // Obtenez une instance de la base de données et du DAO
         AppDatabase appDatabase = AppDatabase.getDatabase(getApplication());
         ContactDao contactDao = appDatabase.contactDao();
 
-        // Initialisez le ViewModel avec le ViewModelFactory
         ContactViewModelFactory factory = new ContactViewModelFactory(contactDao);
         contactViewModel = new ViewModelProvider(this, factory).get(ContactViewModel.class);
 

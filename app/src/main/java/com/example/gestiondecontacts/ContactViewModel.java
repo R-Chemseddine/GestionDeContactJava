@@ -19,7 +19,6 @@ public class ContactViewModel extends ViewModel {
         this.executorService = Executors.newFixedThreadPool(2); // Utiliser un pool de threads pour les opérations DB
     }
 
-    // Fonction pour insérer un contact
     public void insert(Contact contact) {
         executorService.execute(() -> contactDao.insert(contact));
     }

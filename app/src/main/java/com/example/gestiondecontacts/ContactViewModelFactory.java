@@ -13,12 +13,10 @@ public class ContactViewModelFactory implements ViewModelProvider.Factory {
         this.contactDao = contactDao;
     }
 
-
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ContactViewModel.class)) {
-            //noinspection unchecked
             return (T) new ContactViewModel(contactDao);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
