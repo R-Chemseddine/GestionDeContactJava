@@ -24,7 +24,7 @@ public class Contact {
     @ColumnInfo(name = "photo")
     private final String photo;
 
-    // Constructeur avec tous les champs
+
     public Contact(String name, String phone, String address, String photo) {
         this.id = new Random().nextLong();
         this.name = name;
@@ -33,7 +33,7 @@ public class Contact {
         this.photo = photo;
     }
 
-    // Getters
+
     public Long getId() {
         return id;
     }
