@@ -39,7 +39,6 @@ public class ContactDetailActivity extends AppCompatActivity {
                         .setTitle("Supprimer Contact")
                         .setMessage("Êtes-vous sûr de vouloir supprimer ce contact ?")
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                            // Supprimez le contact de la base de données
                             contactViewModel.deleteContactById(contactId);
                             Toast.makeText(ContactDetailActivity.this, "Contact supprimé", Toast.LENGTH_SHORT).show();
                             finish();
@@ -54,10 +53,8 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         Button editButton = findViewById(R.id.edit_contact_button);
         editButton.setOnClickListener(view -> {
-            // Récupérez l'ID du contact ou un autre identifiant unique
             long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
             if (contactId != -1) {
-                // Ouvrez l'activité d'édition du contact
                 Intent intent = new Intent(ContactDetailActivity.this, AddEditContactActivity.class);
                 intent.putExtra("CONTACT_ID", contactId);
                 startActivity(intent);

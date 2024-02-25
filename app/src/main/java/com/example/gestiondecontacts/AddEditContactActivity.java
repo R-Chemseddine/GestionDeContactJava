@@ -28,7 +28,6 @@ public class AddEditContactActivity extends AppCompatActivity {
 
         contactId = getIntent().getLongExtra("CONTACT_ID", -1);
 
-        // Initialisation des composants UI
         EditText nameEditText = findViewById(R.id.editTextContactName);
         EditText phoneEditText = findViewById(R.id.editTextContactPhone);
         EditText addressEditText = findViewById(R.id.editTextContactAddress);

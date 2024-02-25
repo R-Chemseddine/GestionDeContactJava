@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Couleurs Primaires -->
-    <color name="primaryColor">#FF6200EE</color> <!-- Anciennement purple_500 -->
-    <color name="primaryDarkColor">#FF3700B3</color> <!-- Anciennement purple_700 -->
-    <color name="colorOnPrimary">#FFFFFFFF</color> <!-- Utilisez white pour le texte/icones sur le primary color -->
+    <color name="primaryColor">#FF6200EE</color>
+    <color name="primaryDarkColor">#FF3700B3</color>
+    <color name="colorOnPrimary">#FFFFFFFF</color>
 
-    <!-- Couleurs Secondaires -->
-    <color name="secondaryColor">#FF03DAC5</color> <!-- Anciennement teal_200 -->
-    <color name="secondaryDarkColor">#FF018786</color> <!-- Anciennement teal_700 -->
-    <color name="colorOnSecondary">#FF000000</color> <!-- Utilisez black pour le texte/icones sur le secondary color -->
+    <color name="secondaryColor">#FF03DAC5</color>
+    <color name="secondaryDarkColor">#FF018786</color>
+    <color name="colorOnSecondary">#FF000000</color>
 
-    <!-- Couleurs de Support -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
