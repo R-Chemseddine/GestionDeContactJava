@@ -1,10 +1,10 @@
 package com.example.gestiondecontacts;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +31,19 @@ public class ContactDetailActivity extends AppCompatActivity {
         contactNameDetail.setText(contactName);
         contactPhoneDetail.setText(contactPhone);
 
+        long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
+        if (contactId != -1) {
+            contactViewModel.getContactById(contactId).observe(this, contact -> {
+                // Mettez à jour l'interface utilisateur avec les données observées
+                if (contact != null) {
+                    contactNameDetail.setText(contact.getName());
+                    contactPhoneDetail.setText(contact.getPhone());
+                }
+            });
+        }
+
         Button deleteButton = findViewById(R.id.delete_contact_button);
         deleteButton.setOnClickListener(view -> {
-            long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
             if (contactId != -1) {
                 new AlertDialog.Builder(ContactDetailActivity.this)
                         .setTitle("Supprimer Contact")
@@ -55,7 +65,6 @@ public class ContactDetailActivity extends AppCompatActivity {
         Button editButton = findViewById(R.id.edit_contact_button);
         editButton.setOnClickListener(view -> {
             // Récupérez l'ID du contact ou un autre identifiant unique
-            long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
             if (contactId != -1) {
                 // Ouvrez l'activité d'édition du contact
                 Intent intent = new Intent(ContactDetailActivity.this, AddEditContactActivity.class);
@@ -63,6 +72,20 @@ public class ContactDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             } else {
                 Toast.makeText(ContactDetailActivity.this, "Erreur lors de l'édition du contact", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button callButton = findViewById(R.id.call_contact_button);
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + contactPhone)); // Utilisez le numéro récupéré de l'intent
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(ContactDetailActivity.this, "Aucune application d'appel trouvée.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

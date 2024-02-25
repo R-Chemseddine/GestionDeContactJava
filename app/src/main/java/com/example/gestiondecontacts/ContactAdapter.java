@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         this.listener = listener;
     }
 
+    @NonNull
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact, parent, false);
@@ -77,7 +79,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         public void bind(Contact contact) {
             contactName.setText(contact.getName());
             contactPhone.setText(contact.getPhone());
-
             Glide.with(itemView.getContext()).load(contact.getPhoto()).into(contactImage);
         }
     }

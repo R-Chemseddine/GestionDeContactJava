@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
 
             private void performSearch(String query) {
                 contactViewModel.searchContacts(query).observe(MainActivity.this, contacts -> {
-                    contactAdapter.submitList(contacts); // Assurez-vous d'avoir une méthode pour filtrer vos données
+                    contactAdapter.submitList(contacts);
                 });
             }
         });
