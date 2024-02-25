@@ -14,9 +14,6 @@ import com.example.gestiondecontacts.daos.ContactDao;
 import com.example.gestiondecontacts.database.AppDatabase;
 import com.example.gestiondecontacts.models.Contact;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class AddEditContactActivity extends AppCompatActivity {
     private ContactViewModel contactViewModel;
     private long contactId = -1;
@@ -40,39 +37,38 @@ public class AddEditContactActivity extends AppCompatActivity {
         ContactViewModelFactory factory = new ContactViewModelFactory(contactDao);
         contactViewModel = new ViewModelProvider(this, factory).get(ContactViewModel.class);
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        saveButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(AddEditContactActivity.this)
+                    .setTitle("Confirmer l'action")
+                    .setMessage("Êtes-vous sûr de vouloir sauvegarder ces modifications ?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        String name = nameEditText.getText().toString();
+                        String phone = phoneEditText.getText().toString();
+                        String address = addressEditText.getText().toString();
+                        String photo = photoEditText.getText().toString();
 
-                new AlertDialog.Builder(AddEditContactActivity.this)
-                        .setTitle("Confirmer l'action")
-                        .setMessage("Êtes-vous sûr de vouloir sauvegarder ces modifications ?")
-                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        if (!isValidPhone(phone)) {
+                            Toast.makeText(AddEditContactActivity.this, "Numéro de téléphone invalide.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                            String name = nameEditText.getText().toString();
-                            String phone = phoneEditText.getText().toString();
-                            String address = addressEditText.getText().toString();
-                            String photo = photoEditText.getText().toString();
+                        Contact contact = new Contact(name, phone, address, photo);
 
-                            Contact contact = new Contact(name, phone, address, photo);
+                        if (contactId == -1) {
+                            contactViewModel.insert(contact);
+                            Toast.makeText(AddEditContactActivity.this, "Contact ajouté", Toast.LENGTH_SHORT).show();
+                        } else {
+                            contact.setId(contactId);
+                            contactViewModel.update(contact);
+                            Toast.makeText(AddEditContactActivity.this, "Contact mis à jour", Toast.LENGTH_SHORT).show();
+                        }
 
-                            if (contactId == -1) {
-                                contactViewModel.insert(contact);
-                                Toast.makeText(AddEditContactActivity.this, "Contact ajouté", Toast.LENGTH_SHORT).show();
-                            } else {
-                                contact.setId(contactId);
-                                contactViewModel.update(contact);
-                                Toast.makeText(AddEditContactActivity.this, "Contact mis à jour", Toast.LENGTH_SHORT).show();
-                            }
-
-                            finish();
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .show();
-            }
+                        finish();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
         });
 
-        long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
         if (contactId != -1) {
             contactViewModel.getContactById(contactId).observe(this, contact -> {
                 if (contact != null) {
@@ -83,6 +79,10 @@ public class AddEditContactActivity extends AppCompatActivity {
                 }
             });
         }
+    }
 
+    private boolean isValidPhone(String phone) {
+        String regex = "^[+][0-9]{1,3}[0-9]{4,10}$";
+        return phone.matches(regex);
     }
 }
