@@ -51,6 +51,20 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
             startActivity(intent);
         });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         contactViewModel.getAllContacts().observe(this, contacts -> {
             contactAdapter.submitList(contacts);
         });
