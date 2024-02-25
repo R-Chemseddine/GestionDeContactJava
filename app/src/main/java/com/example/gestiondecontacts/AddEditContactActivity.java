@@ -9,12 +9,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.gestioncontact_boudjema_rachdi_rahmani.database.AppDatabase;
-import com.example.gestioncontact_boudjema_rachdi_rahmani.models.Contact;
+import com.example.gestiondecontacts.daos.ContactDao;
+import com.example.gestiondecontacts.database.AppDatabase;
+import com.example.gestiondecontacts.models.Contact;
 
-import kotlinx.coroutines.CoroutineScope;
-import kotlinx.coroutines.Dispatchers;
-import kotlinx.coroutines.launch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AddEditContactActivity extends AppCompatActivity {
     private ContactViewModel contactViewModel;
@@ -47,22 +47,26 @@ public class AddEditContactActivity extends AppCompatActivity {
                 String address = addressEditText.getText().toString().trim();
                 String photo = photoEditText.getText().toString().trim();
 
-                // Validation de base pour s'assurer que les champs ne sont pas vides
                 if (!name.isEmpty() && !phone.isEmpty() && !address.isEmpty()) {
-                    // Création d'un objet Contact
                     Contact newContact = new Contact(name, phone, address, photo);
 
-                    // Sauvegarde du contact dans la base de données en utilisant Room
-                    CoroutineScope coroutineScope = new CoroutineScope(Dispatchers.IO);
-                    coroutineScope.launch(new Runnable() {
+                    // Utilisation d'Executors pour exécuter de manière asynchrone
+                    ExecutorService executorService = Executors.newSingleThreadExecutor();
+                    executorService.execute(new Runnable() {
                         @Override
                         public void run() {
                             contactViewModel.insert(newContact);
+                            // Retour au thread UI pour afficher le Toast
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(AddEditContactActivity.this, "Contact ajouté avec succès", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
-
-                    Toast.makeText(AddEditContactActivity.this, "Contact ajouté avec succès", Toast.LENGTH_SHORT).show();
-                    finish(); // Retour à l'activité précédente
+                    executorService.shutdown();
+                    finish();
                 } else {
                     Toast.makeText(AddEditContactActivity.this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show();
                 }

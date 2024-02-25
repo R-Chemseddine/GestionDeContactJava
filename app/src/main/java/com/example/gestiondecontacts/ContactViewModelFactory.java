@@ -13,6 +13,7 @@ public class ContactViewModelFactory implements ViewModelProvider.Factory {
         this.contactDao = contactDao;
     }
 
+
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

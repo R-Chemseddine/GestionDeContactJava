@@ -1,6 +1,8 @@
 package com.example.gestiondecontacts;
 
 import android.app.Application;
+
+import com.example.gestiondecontacts.daos.ContactDao;
 import com.example.gestiondecontacts.database.AppDatabase;
 
 public class ContactsApplication extends Application {
