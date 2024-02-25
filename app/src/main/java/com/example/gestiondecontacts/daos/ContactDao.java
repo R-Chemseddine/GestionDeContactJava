@@ -24,8 +24,8 @@ public interface ContactDao {
     @Delete
     void delete(Contact contact);
 
-    @Query("SELECT * FROM contacts WHERE name LIKE :searchQuery")
-    LiveData<List<Contact>> searchContacts(String searchQuery);
+    @Query("SELECT * FROM contacts WHERE name LIKE '%' || :query || '%'")
+    LiveData<List<Contact>> searchContacts(String query);
 
     @Query("SELECT * FROM contacts ORDER BY name ASC")
     LiveData<List<Contact>> getAllContacts();
