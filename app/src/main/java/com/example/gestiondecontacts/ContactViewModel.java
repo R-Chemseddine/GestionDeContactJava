@@ -16,7 +16,7 @@ public class ContactViewModel extends ViewModel {
 
     public ContactViewModel(ContactDao contactDao) {
         this.contactDao = contactDao;
-        this.executorService = Executors.newFixedThreadPool(2); // Utiliser un pool de threads pour les opérations DB
+        this.executorService = Executors.newFixedThreadPool(2);
     }
 
     public void insert(Contact contact) {

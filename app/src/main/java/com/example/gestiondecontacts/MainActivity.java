@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
         intent.putExtra("CONTACT_ID", contact.getId());
         intent.putExtra("CONTACT_NAME", contact.getName());
         intent.putExtra("CONTACT_PHONE", contact.getPhone());
+        intent.putExtra("CONTACT_ADDRESS", contact.getAddress());
         startActivity(intent);
     }
 
