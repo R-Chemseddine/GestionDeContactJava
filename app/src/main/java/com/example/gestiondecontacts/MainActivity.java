@@ -2,6 +2,7 @@ package com.example.gestiondecontacts;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements ContactAdapter.On
         intent.putExtra("CONTACT_NAME", contact.getName());
         intent.putExtra("CONTACT_PHONE", contact.getPhone());
         intent.putExtra("CONTACT_ADDRESS", contact.getAddress());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCallButtonClicked(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
         startActivity(intent);
     }
 

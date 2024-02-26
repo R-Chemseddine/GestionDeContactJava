@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,11 +62,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         private final TextView contactName;
         private final TextView contactPhone;
 
+        public ImageButton callButton;
+
         public ContactViewHolder(View itemView) {
             super(itemView);
             contactImage = itemView.findViewById(R.id.contact_image);
             contactName = itemView.findViewById(R.id.contact_name);
             contactPhone = itemView.findViewById(R.id.contact_phone);
+            callButton = itemView.findViewById(R.id.call_button);
 
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
@@ -74,6 +78,18 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                     listener.onContactClicked(clickedContact);
                 }
             });
+
+            callButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        String phoneNumber = contacts.get(position).getPhone();
+                        listener.onCallButtonClicked(phoneNumber);
+                    }
+                }
+            });
+
         }
 
         public void bind(Contact contact) {
@@ -85,5 +101,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public interface OnContactClickListener {
         void onContactClicked(Contact contact);
+        void onCallButtonClicked(String phoneNumber);
     }
 }

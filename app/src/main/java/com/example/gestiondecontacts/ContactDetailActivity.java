@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,6 +22,8 @@ public class ContactDetailActivity extends AppCompatActivity {
 
     private ContactViewModel contactViewModel;
     private static final int REQUEST_CALL_PHONE = 1;
+    private String contactPhone;
+    private long contactId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         contactViewModel = new ViewModelProvider(this, new ContactViewModelFactory(((ContactsApplication) getApplication()).getContactDao())).get(ContactViewModel.class);
 
         String contactName = getIntent().getStringExtra("CONTACT_NAME");
-        String contactPhone = getIntent().getStringExtra("CONTACT_PHONE");
+        contactPhone = getIntent().getStringExtra("CONTACT_PHONE");
         String contactAddress = getIntent().getStringExtra("CONTACT_ADDRESS");
 
         TextView contactNameDetail = findViewById(R.id.contact_name_detail);
@@ -40,7 +43,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         contactPhoneDetail.setText(contactPhone);
         contactAddressDetail.setText(contactAddress);
 
-        long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
+        contactId = getIntent().getLongExtra("CONTACT_ID", -1);
         if (contactId != -1) {
             contactViewModel.getContactById(contactId).observe(this, contact -> {
                 if (contact != null) {
@@ -94,12 +97,48 @@ public class ContactDetailActivity extends AppCompatActivity {
                     startCallIntent(contactPhone);
                 }
             }
-
-            private void startCallIntent(String phoneNumber) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + phoneNumber));
-                startActivity(intent);
-            }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CALL_PHONE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCallIntent(contactPhone);
+            } else {
+                Toast.makeText(this, "Permission pour passer des appels refusée", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void startCallIntent(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateContactDetails(contactId);
+    }
+
+    private void updateContactDetails(long contactId) {
+        if (contactId != -1) {
+            contactViewModel.getContactById(contactId).observe(this, contact -> {
+                if (contact != null) {
+                    TextView contactNameDetail = findViewById(R.id.contact_name_detail);
+                    TextView contactPhoneDetail = findViewById(R.id.contact_phone_detail);
+                    TextView contactAddressDetail = findViewById(R.id.contact_address_detail);
+
+                    contactNameDetail.setText(contact.getName());
+                    contactPhoneDetail.setText(contact.getPhone());
+                    contactAddressDetail.setText(contact.getAddress());
+
+                    contactPhone = contact.getPhone();
+                }
+            });
+        }
     }
 }
