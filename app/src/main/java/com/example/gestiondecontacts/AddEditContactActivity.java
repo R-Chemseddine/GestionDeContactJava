@@ -82,7 +82,7 @@ public class AddEditContactActivity extends AppCompatActivity {
     }
 
     private boolean isValidPhone(String phone) {
-        String regex = "^(?:\\+|\\d)\\d{7,}$";
+        String regex = "^[0-9]+$";
         return phone.matches(regex);
     }
 }

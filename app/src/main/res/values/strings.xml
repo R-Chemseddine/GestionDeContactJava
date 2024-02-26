@@ -10,4 +10,5 @@
     <string name="contact_photo">Photo du contact</string>
     <string name="delete_contact">Supprimer</string>
     <string name="edit_contact">Modifier</string>
+    <string name="titre_main_activity">Liste des contacts</string>
 </resources>
