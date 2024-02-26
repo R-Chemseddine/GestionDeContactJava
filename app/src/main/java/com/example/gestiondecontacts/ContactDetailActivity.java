@@ -1,20 +1,26 @@
 package com.example.gestiondecontacts;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 public class ContactDetailActivity extends AppCompatActivity {
 
     private ContactViewModel contactViewModel;
+    private static final int REQUEST_CALL_PHONE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,6 @@ public class ContactDetailActivity extends AppCompatActivity {
         long contactId = getIntent().getLongExtra("CONTACT_ID", -1);
         if (contactId != -1) {
             contactViewModel.getContactById(contactId).observe(this, contact -> {
-                // Mettez à jour l'interface utilisateur avec les données observées
                 if (contact != null) {
                     contactNameDetail.setText(contact.getName());
                     contactPhoneDetail.setText(contact.getPhone());
@@ -79,13 +84,21 @@ public class ContactDetailActivity extends AppCompatActivity {
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + contactPhone)); // Utilisez le numéro récupéré de l'intent
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
+                Log.d("CallIntent", "Dialing number: " + contactPhone);
+                // Vérifier si la permission CALL_PHONE a été accordée
+                if (ContextCompat.checkSelfPermission(ContactDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // Si la permission n'a pas été accordée, demandez-la
+                    ActivityCompat.requestPermissions(ContactDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PHONE);
                 } else {
-                    Toast.makeText(ContactDetailActivity.this, "Aucune application d'appel trouvée.", Toast.LENGTH_SHORT).show();
+                    // Si la permission a été accordée, lancez l'intention d'appel
+                    startCallIntent(contactPhone);
                 }
+            }
+
+            private void startCallIntent(String phoneNumber) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                startActivity(intent);
             }
         });
     }
